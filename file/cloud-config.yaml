@@ -1,0 +1,15 @@
+#cloud-config
+package_update: true
+packages:
+  - nginx
+runcmd:
+  - systemctl enable nginx
+  - systemctl start nginx
+  - ip_address=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+  - echo "Server IP  $ip_address" > /var/www/html/index.html
+users:
+  - name: vasiliy
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ${ssh_public_key}
